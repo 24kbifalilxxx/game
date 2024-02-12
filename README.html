@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de devinette de lettre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jeu de devinette de lettre</h1>
+    <p>Une lettre a été choisie au hasard. Devinez quelle est cette lettre.</p>
+    <input type="text" id="guessInput" maxlength="1">
+    <button onclick="devinerLettre()">Devinez</button>
+    <p id="message"></p>
+
+    <script>
+        let lettres = "azertyuiopqsdfghjklmwxcvbn";
+        let lettreADeviner = lettres.charAt(Math.floor(Math.random() * lettres.length));
+
+        function devinerLettre() {
+            let guess = document.getElementById("guessInput").value.toLowerCase();
+
+            if (guess === lettreADeviner) {
+                document.getElementById("message").textContent = "Bravo! Vous avez deviné la lettre correctement.";
+                let choix = confirm("Voulez-vous rejouer?");
+                if (choix) {
+                    resetGame();
+                }
+            } else {
+                document.getElementById("message").textContent = "Dommage! Essayez encore.";
+            }
+        }
+
+        function resetGame() {
+            lettreADeviner = lettres.charAt(Math.floor(Math.random() * lettres.length));
+            document.getElementById("guessInput").value = "";
+            document.getElementById("message").textContent = "Une lettre a été choisie au hasard. Devinez quelle est cette lettre.";
+        }
+    </script>
+</body>
+</html>
+
