@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,8 @@
     <script>
         let lettres = "azertyuiopqsdfghjklmwxcvbn";
         let lettreADeviner = lettres.charAt(Math.floor(Math.random() * lettres.length));
+        let delaiEntreEssais = 3; // en secondes
+        let timer;
 
         function devinerLettre() {
             let guess = document.getElementById("guessInput").value.toLowerCase();
@@ -33,13 +35,37 @@
                 }
             } else {
                 document.getElementById("message").textContent = "Dommage! Essayez encore.";
+                disableInput();
+                let tempsRestant = delaiEntreEssais;
+                document.getElementById("message").textContent = `Dommage! Essayez encore. Nouvel essai dans ${tempsRestant} secondes.`;
+                timer = setInterval(function() {
+                    tempsRestant--;
+                    document.getElementById("message").textContent = `Dommage! Essayez encore. Nouvel essai dans ${tempsRestant} secondes.`;
+                    if (tempsRestant <= 0) {
+                        clearInterval(timer);
+                        resetInput();
+                    }
+                }, 1000);
             }
         }
 
-        function resetGame() {
-            lettreADeviner = lettres.charAt(Math.floor(Math.random() * lettres.length));
+        function disableInput() {
+            document.getElementById("guessInput").disabled = true;
+            document.querySelector("button").disabled = true;
+        }
+
+        function resetInput() {
+            clearInterval(timer);
             document.getElementById("guessInput").value = "";
+            document.getElementById("guessInput").disabled = false;
+            document.querySelector("button").disabled = false;
             document.getElementById("message").textContent = "Une lettre a été choisie au hasard. Devinez quelle est cette lettre.";
+        }
+
+        function resetGame() {
+            clearInterval(timer);
+            lettreADeviner = lettres.charAt(Math.floor(Math.random() * lettres.length));
+            resetInput();
         }
     </script>
 </body>
